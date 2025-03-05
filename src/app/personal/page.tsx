@@ -1,12 +1,16 @@
 "use client";
-import CompanyInformation from "@/components/coperate_tax/CompanyInformation";
-import Declaration from "@/components/coperate_tax/Declaration";
-import Expenses from "@/components/coperate_tax/Expenses";
-import IncomeDetails from "@/components/coperate_tax/IncomeDetails";
-import OtherIncomeSources from "@/components/coperate_tax/OtherSources";
+import Declaration from "@/components/personal_tax/Declaration";
+import IncomeDetails from "@/components/personal_tax/IncomeDetails";
 import { Check, Edit, LucideIcon, NotepadText, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import FormDisplay from "@/components/FormDisplay";
+import BusinessIncome from "@/components/personal_tax/BusinessIncome";
+import PersonalInformation from "@/components/personal_tax/PersonalInformation";
+import DividendIncome from "@/components/personal_tax/DividendIncome";
+import InterestIncome from "@/components/personal_tax/InterestIncome";
+import RentalIncome from "@/components/personal_tax/RentalIncome";
+import SecondRentalIncome from "@/components/personal_tax/SecondRentalIncome";
+import PersonalTaxDisplay from "@/components/PersonaTaxDisplay";
 
 export default function Home() {
   const [isFormComplete, setIsFormComplete] = useState(false);
@@ -19,28 +23,38 @@ export default function Home() {
   };
 
   const [formData, setFormData] = useState<any>({
-    companyInformation: null,
+    personalInformation: null,
     operatingIncome: null,
-    otherIncomeSources: null,
-    expenses: null,
+    businessIncome: null,
     declaration: null,
+    dividendIncome: null, // Corrected key
+    interestIncome: null,
+    rentalIncome: null,
+    secondRentalIncome: null, // Added for completeness
   });
+  console.log(formData);
 
   useEffect(() => {
     const checkFormCompleteness = () => {
       const {
-        companyInformation,
+        personalInformation,
         operatingIncome,
-        otherIncomeSources,
-        expenses,
+        businessIncome,
+        dividendIncome, // Corrected key
+        interestIncome,
+        rentalIncome,
+        secondRentalIncome,
         declaration,
       } = formData;
 
       const isComplete =
-        companyInformation !== null &&
+        personalInformation !== null &&
         operatingIncome !== null &&
-        otherIncomeSources !== null &&
-        expenses !== null &&
+        businessIncome !== null &&
+        dividendIncome !== null &&
+        interestIncome !== null &&
+        rentalIncome !== null &&
+        secondRentalIncome !== null &&
         declaration !== null;
 
       setIsFormComplete(isComplete);
@@ -150,92 +164,125 @@ export default function Home() {
   return (
     <section className="max-w-[1300px] border-2 border-black mx-auto my-12">
       <h1 className="font-bold text-xl p-4 py-6 border-b-2 border-black">
-        CAMEROON CORPORATE TAX INCOME STATEMENT
+        CAMEROON TAXPAYER INCOME DECLARATION FORM (UNOFFICIAL)
       </h1>
       <div className="p-4 py-6 border-b-2 border-black">
-        <span className="font-semibold">Instructions: </span>
-        <p className="inline">
-          Complete all sections accurately. Attach supporting documents where
-          required. Providing false or misleading information may result in
-          penalties under the <strong>Cameroon Finance Law of 2025</strong>
-        </p>
+        This form is used to <strong>declare income for tax purposes</strong> in
+        accordance with the <b>Cameroon Finance Law of 2025.</b> Fill in all
+        applicable sections, ensuring accuracy to avoid penalties. Provide{" "}
+        <b>accurate information</b> to avoid tax penalties. Submit this form
+        before <b>April 30, 2025</b> to comply with tax deadlines. Retain a copy
+        of this form for personal records.
       </div>
 
       {/* Form sections */}
       <main className="p-4 flex flex-col gap-6">
         <section className="flex flex-col gap-2">
           <h2 className="text-xl font-bold text-green-800">
-            SECTION 1: COMPANY INFORMATION
+            SECTION 1: PERSONAL INFORMATION
           </h2>
-          <p className="font-medium">
-            (This section collects basic company details for identification and
-            compliance)
-          </p>
-          <FormButton onClick={() => setActiveModal("companyInformation")}>
-            COMPANY INFORMATION
+
+          <FormButton onClick={() => setActiveModal("personalInformation")}>
+            PERSONAL INFORMATION
           </FormButton>
-          {activeModal === "companyInformation" &&
-            renderModal(CompanyInformation, "companyInformation")}
+          {activeModal === "personalInformation" &&
+            renderModal(PersonalInformation, "personalInformation")}
         </section>
 
         <section className="flex flex-col gap-2">
           <h2 className="text-xl font-bold text-green-800">
             SECTION 2: INCOME DETAILS
           </h2>
-          <p className="font-medium">
-            (Declare all business income sources. Supporting documents must be
-            attached where applicable.)
-          </p>
           <div className="flex flex-col gap-2">
             <div>
               <h3 className="mb-2 font-semibold">
-                SECTION 2.1: Operating Income
+                SECTION 2.1: Employment Income (For salaried individuals)
               </h3>
               <FormButton onClick={() => setActiveModal("operatingIncome")}>
-                OPERATING INCOME
+                EMPLOYMENT INCOME
               </FormButton>
               {activeModal === "operatingIncome" &&
                 renderModal(IncomeDetails, "operatingIncome")}
             </div>
             <div>
               <h3 className="mb-2 font-semibold">
-                SECTION 2.2: Other Income Sources
+                SECTION 2.2: Business Income (For business owners and
+                self-employed individuals)
               </h3>
-              <FormButton onClick={() => setActiveModal("otherIncomeSources")}>
-                OTHER INCOME SOURCES
+              <FormButton onClick={() => setActiveModal("businessIncome")}>
+                BUSINESS INCOME
               </FormButton>
-              {activeModal === "otherIncomeSources" &&
-                renderModal(OtherIncomeSources, "otherIncomeSources")}
+              {activeModal === "businessIncome" &&
+                renderModal(BusinessIncome, "businessIncome")}
+            </div>
+            <div>
+              <h3 className="mb-2 font-semibold">
+                SECTION 2.3: Investment Income (For individuals earning passive
+                income)
+              </h3>
+              <div>
+                <h4 className="mb-2 font-medium">
+                  A) Dividend Income (Profit earned from owning shares in a
+                  company)
+                </h4>
+                <FormButton onClick={() => setActiveModal("dividendIncome")}>
+                  DIVIDEND INCOME
+                </FormButton>
+                {activeModal === "dividendIncome" &&
+                  renderModal(DividendIncome, "dividendIncome")}
+              </div>
+              <div className="mt-4">
+                <h4 className="mb-2 font-medium">
+                  B) Interest Income (Money earned from lending or saving money)
+                </h4>
+                <FormButton onClick={() => setActiveModal("interestIncome")}>
+                  INTEREST INCOME
+                </FormButton>
+                {activeModal === "interestIncome" &&
+                  renderModal(InterestIncome, "interestIncome")}
+              </div>
+            </div>
+            <div>
+              <h3 className="mb-2 font-semibold">
+                C) Rental Income (Money earned from renting out
+                property)
+              </h3>
+              <div>
+                <h4 className="mb-2 font-medium">
+                  First Rental Property (e.g., houses, apartments, offices, or
+                  land)
+                </h4>
+                <FormButton onClick={() => setActiveModal("rentalIncome")}>
+                  FIRST RENTAL INCOME
+                </FormButton>
+                {activeModal === "rentalIncome" &&
+                  renderModal(RentalIncome, "rentalIncome")}
+              </div>
+              <div className="mt-4">
+                <h4 className="mb-2 font-medium">
+                  Second Rental Property (if applicable)
+                </h4>
+                <FormButton
+                  onClick={() => setActiveModal("secondRentalIncome")}
+                >
+                  SECOND RENTAL INCOME
+                </FormButton>
+                {activeModal === "secondRentalIncome" &&
+                  renderModal(SecondRentalIncome, "secondRentalIncome")}
+              </div>
             </div>
           </div>
         </section>
 
         <section className="flex flex-col gap-2">
           <h2 className="text-xl font-bold text-green-800">
-            SECTION 3: EXPENSES
-          </h2>
-          <p className="font-medium">
-            (List all business expenses. Attach supporting documents where
-            applicable.)
-          </p>
-          <FormButton onClick={() => setActiveModal("expenses")}>
-            EXPENSES
-          </FormButton>
-          {activeModal === "expenses" && renderModal(Expenses, "expenses")}
-        </section>
-
-        <section className="flex flex-col gap-2">
-          <h2 className="text-xl font-bold text-green-800">
-            SECTION 4: DECLARATION AND SIGNATURE
+            SECTION 3: DECLARATION AND SIGNATURE
           </h2>
           <div className="mb-2">
-            <span className="font-semibold">Declaration: </span>
             <p className="font-medium">
               I, the undersigned, certify that the information provided in this
-              Corporate Tax Income is <b>true, accurate, and complete</b>. I
-              understand that providing <b>false or misleading</b> information
-              may result in penalties under the{" "}
-              <b>Cameroon Finance Law of 2025</b>
+              form is true and correct. I understand that false declaration may
+              result in penalties as per the Cameroon Finance Law of 2025.
             </p>
           </div>
           <FormButton onClick={() => setActiveModal("declaration")}>
@@ -252,22 +299,13 @@ export default function Home() {
           Submission Instructions
         </h3>
         <div className="flex items-center gap-1">
-          <Check size={16} />
           <p className="text-[14px] font-medium">
-            Submit this form along with required supporting documents to the
-            Cameroon Tax Authority
+            Annual Income Tax Declaration Deadline: April 30, 2025.
           </p>
         </div>
         <div className="flex items-center gap-1">
-          <Check size={16} />
           <p className="text-[14px] font-medium">
-            Ensure all figures are in XAF (Central African CFA franc)
-          </p>
-        </div>
-        <div className="flex items-center gap-1">
-          <Check size={16} />
-          <p className="text-[14px] font-medium">
-            Keep a copy of this Form for your records
+            Late submission may result in fines or penalties.
           </p>
         </div>
       </div>
@@ -290,11 +328,11 @@ export default function Home() {
               }
             `}
           >
-            Submit Corporate Tax Form
+            Submit Personal Tax Form
           </button>
         ) : (
           <div ref={formDisplayRef} className="w-full">
-            <FormDisplay formData={formData} />
+            <PersonalTaxDisplay formData={formData} />
           </div>
         )}
       </div>
